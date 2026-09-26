@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laptop-Vergleich fürs Studium</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --bg-card: #1a1d24;
+    --bg-card-hover: #21242d;
+    --border: #2a2e38;
+    --text: #e8e9ed;
+    --text-dim: #9a9fab;
+    --accent: #6ea8fe;
+    --gold: #e8b923;
+    --silver: #b9bec9;
+    --bronze: #c98a4b;
+    --green: #4ade80;
+    --red: #f87171;
+    --grey: #6b7280;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+  }
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 5rem;
+  }
+  header {
+    margin-bottom: 2.5rem;
+  }
+  h1 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    margin: 0 0 0.5rem;
+  }
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 1rem;
+    max-width: 70ch;
+  }
+  .meta-box {
+    margin-top: 1.25rem;
+    padding: 1rem 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.92rem;
+    color: var(--text-dim);
+  }
+  .meta-box strong { color: var(--text); }
+
+  h2 {
+    font-size: 1.3rem;
+    margin: 3rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    transition: background 0.15s ease;
+  }
+  .card:hover { background: var(--bg-card-hover); }
+  .card.dimmed { opacity: 0.72; }
+  .card.highlight { border-color: var(--gold); }
+
+  .card-media {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .card-media img {
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+    border-radius: 8px;
+    background: #fff;
+    object-fit: contain;
+    padding: 0.4rem;
+  }
+  .rank {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .rank-1 { background: var(--gold); color: #1a1600; }
+  .rank-2 { background: var(--silver); color: #1a1a1a; }
+  .rank-3 { background: var(--bronze); color: #1a1000; }
+  .rank-4, .rank-5 { background: var(--border); color: var(--text-dim); }
+  .rank-special { background: var(--accent); color: #051222; }
+
+  .card-body { min-width: 0; }
+  .card-top {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .card-body h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+  .badge.out { color: var(--red); border-color: var(--red); }
+  .badge.top { color: var(--green); border-color: var(--green); }
+  .badge.special { color: var(--accent); border-color: var(--accent); }
+
+  .rating {
+    color: var(--text-dim);
+    font-size: 0.88rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .specs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.4rem 1.5rem;
+    font-size: 0.87rem;
+    margin-bottom: 0.9rem;
+    color: var(--text-dim);
+  }
+  .specs div b { color: var(--text); font-weight: 600; }
+
+  .reasoning {
+    font-size: 0.92rem;
+    margin: 0;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+  .reasoning b { color: var(--text); }
+
+  .footnote {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-top: 0.5rem;
+    font-style: italic;
+  }
+
+  .conclusion {
+    background: var(--bg-card);
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0 2.5rem;
+  }
+  .conclusion h3 {
+    margin-top: 0;
+    color: var(--accent);
+    font-size: 1.05rem;
+  }
+
+  .notes {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+  }
+  .notes ul { margin: 0; padding-left: 1.2rem; }
+  .notes li { margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-dim); }
+  .notes li:last-child { margin-bottom: 0; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.6rem 0.7rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th {
+    color: var(--text-dim);
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .table-scroll { overflow-x: auto; }
+
+  footer {
+    margin-top: 3.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 0.82rem;
+  }
+
+  @media (max-width: 640px) {
+    .card { grid-template-columns: 1fr; }
+    .card-media { flex-direction: row; }
+    .card-media img { max-width: 110px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Laptop-Vergleich fürs Studium</h1>
+    <p class="subtitle">Sechs Lenovo-Notebooks im Vergleich – fünf aus Angeboten auf lenovo.com/de, dazu ein ThinkPad als persönlicher Zusatzkandidat. Bewertet mit Fokus auf Laufzeit vor Leistung.</p>
+    <div class="meta-box">
+      <div><strong>Ziel:</strong> Laptop für ein Studium</div>
+      <div><strong>Priorität-Kriterium:</strong> Laufzeit vor Leistung (wahrscheinlich)</div>
+      <div><strong>Stand:</strong> 26.09.2026</div>
+    </div>
+  </header>
+
+  <h2>Rangliste</h2>
+
+  <!-- 1. Yoga Slim 9i 14 -->
+  <div class="card highlight">
+    <div class="card-media">
+      <div class="rank rank-1">1</div>
+      <img src="https://gzhls.at/pix/c4/a9/c4a9c47da8cbbb7a-n.webp" alt="Lenovo Yoga Slim 9i 14">
+    </div>
+    <div class="card-body">
+      <div class="card-top">
+        <h3>Yoga Slim 9i 14</h3>
+        <span class="badge top">Favorit</span>
+      </div>
+      <div class="rating">★★★★★ (21 Bewertungen)</div>
+      <div class="specs">
+        <div><b>CPU:</b> Intel Core Ultra 7 256V (Lunar Lake)</div>
+        <div><b>RAM:</b> 16 GB LPDDR5X, onboard</div>
+        <div><b>Speicher:</b> 1 TB SSD</div>
+        <div><b>Display:</b> 14″ 3840×2400 OLED, 120 Hz, 600/750 nits HDR, 100% DCI-P3</div>
+        <div><b>Grafik:</b> Intel Arc (integriert)</div>
+        <div><b>Akku:</b> 75 Wh</div>
+        <div><b>Anschlüsse:</b> 2× Thunderbolt 4/USB4</div>
+        <div><b>OS:</b> Windows 11 Home</div>
+        <div><b>Laufzeit:</b> Hersteller ~14 h, praxisnah 10–12 h</div>
+        <div><b>Preis:</b> 32GB-Variante ~2.000–2.300 €; 16GB/1TB-Einzelpreis nicht bestätigt</div>
+      </div>
+      <p class="reasoning">Favorit. 14″ – kompakter als die 16″-Kandidaten. x86, also keine Software-Kompatibilitätssorgen. Laufzeit mit Hersteller ~14 h / praxisnah 10–12 h solide, wenn auch nicht Bestwert. Am teuersten, aber das nimmt Lars für Kompatibilität und Größe in Kauf.</p>
+      <p class="footnote">Konfiguration mit 16 GB/1 TB nicht 1:1 als Einzelangebot bestätigt – Display, Anschlüsse und Akku sind von der baugleichen 32-GB-Schwestervariante übernommen.</p>
+    </div>
+  </div>
+
+  <!-- 2. Yoga Slim 7x Gen 11 -->
+  <div class="card">
+    <div class="card-media">
+      <div class="rank rank-2">2</div>
+      <img src="https://gzhls.at/pix/38/1e/381eaf68a06ab5dc-n.webp" alt="Lenovo Yoga Slim 7x Gen 11">
+    </div>
+    <div class="card-body">
+      <div class="card-top">
+        <h3>Yoga Slim 7x Gen 11</h3>
+        <span class="badge">Laufzeit-Bestwert</span>
+      </div>
+      <div class="rating">★★★★½ (8 Bewertungen)</div>
+      <div class="specs">
+        <div><b>CPU:</b> Qualcomm Snapdragon X2 Elite (ARM, 12–18 Kerne je Ausbau)</div>
+        <div><b>RAM:</b> ab 16 GB LPDDR5X</div>
+        <div><b>Speicher:</b> ab 1 TB SSD</div>
+        <div><b>Display:</b> 14″ OLED, WUXGA 60 Hz (Basis) bis 2,8K 120 Hz</div>
+        <div><b>Grafik:</b> Adreno (integriert)</div>
+        <div><b>Akku:</b> 70 Wh</div>
+        <div><b>Gewicht:</b> 1,17 kg</div>
+        <div><b>Laufzeit:</b> Test (Video-Loop, 150 nits): ~19 h 42 min</div>
+        <div><b>Preis:</b> ab 1.449 € (X2 Plus/FHD+) bis ~2.169 € (Topkonfig)</div>
+      </div>
+      <p class="reasoning">Laufzeit-Bestwert im Vergleich (fast doppelt so lang wie die x86-Modelle bei ähnlicher Akkukapazität) und günstigster Einstiegspreis. Aber: ARM/Snapdragon-CPU ist nicht zu jeder Software kompatibel – deshalb nur Platz 2.</p>
+    </div>
+  </div>
+
+  <!-- 3. IdeaPad Pro 5 16 -->
+  <div class="card dimmed">
+    <div class="card-media">
+      <div class="rank rank-3">3</div>
+      <img src="https://gzhls.at/pix/83/36/83366a4239aa3cdd-n.webp" alt="Lenovo IdeaPad Pro 5 16">
+    </div>
+    <div class="card-body">
+      <div class="card-top">
+        <h3>IdeaPad Pro 5 16</h3>
+        <span class="badge out">Aus dem Rennen</span>
+      </div>
+      <div class="rating">★★★★½ (40 Bewertungen)</div>
+      <div class="specs">
+        <div><b>CPU:</b> AMD Ryzen AI 7 350 (Krackan Point)</div>
+        <div><b>RAM:</b> 32 GB LPDDR5X-8000, onboard</div>
+        <div><b>Speicher:</b> 1 TB SSD (M.2 2242)</div>
+        <div><b>Display:</b> 16″ 2880×1800 OLED, 120 Hz, 500/1100 nits HDR, 100% DCI-P3</div>
+        <div><b>Grafik:</b> AMD Radeon 860M</div>
+        <div><b>Akku:</b> 84 Wh</div>
+        <div><b>Anschlüsse:</b> 2× USB4/DP2.1, 2× USB-A, HDMI 2.1, SD-Slot</div>
+        <div><b>Laufzeit:</b> Hersteller 21 h (Videowiedergabe)</div>
+        <div><b>Preis:</b> ~1.199–1.699 € (schwankt aktuell stark)</div>
+      </div>
+      <p class="reasoning">Größter Akku und günstigster Preis der Top-Gruppe, aber: 16″ ist zu groß für den Zweck – deshalb aus dem Rennen.</p>
+    </div>
+  </div>
+
+  <!-- 4. Yoga 7a 2-in-1 Gen 11 -->
+  <div class="card dimmed">
+    <div class="card-media">
+      <div class="rank rank-4">4</div>
+      <img src="https://gzhls.at/pix/b4/1d/b41de38798c44f05-n.webp" alt="Lenovo Yoga 7a 2-in-1 Gen 11">
+    </div>
+    <div class="card-body">
+      <div class="card-top">
+        <h3>Yoga 7a 2-in-1 Gen 11</h3>
+        <span class="badge out">Risiko</span>
+      </div>
+      <div class="rating">★★★★ (10 Bewertungen)</div>
+      <div class="specs">
+        <div><b>CPU:</b> AMD Ryzen AI 5/7 400-Serie</div>
+        <div><b>RAM:</b> bis 32 GB</div>
+        <div><b>Speicher:</b> bis 2 TB SSD</div>
+        <div><b>Display:</b> 16″ WUXGA IPS oder bis 2,8K 120 Hz OLED, 360°-Scharnier</div>
+        <div><b>Grafik:</b> AMD Radeon 840M</div>
+        <div><b>Gewicht:</b> ~1,74 kg (Akku-Wh nicht verifiziert)</div>
+        <div><b>Laufzeit:</b> keine verlässliche Angabe gefunden</div>
+        <div><b>Preis:</b> ~1.365–1.840 € je nach CPU/RAM</div>
+      </div>
+      <p class="reasoning">Keine verlässliche Laufzeit-Angabe gefunden, daher Risiko. Außerdem macht die 2-in-1/Tablet-Funktion das Gerät meist etwas schwerer – wird laut Lars' Erfahrung ohnehin selten genutzt, also kein Mehrwert, der das zusätzliche Gewicht rechtfertigt.</p>
+    </div>
+  </div>
+
+  <!-- 5. Yoga Pro 7 14 -->
+  <div class="card dimmed">
+    <div class="card-media">
+      <div class="rank rank-5">5</div>
+      <img src="https://gzhls.at/pix/cb/ce/cbce7267f1b9970d-n.webp" alt="Lenovo Yoga Pro 7 14">
+    </div>
+    <div class="card-body">
+      <div class="card-top">
+        <h3>Yoga Pro 7 14</h3>
+        <span class="badge out">Schwächste Laufzeit</span>
+      </div>
+      <div class="rating">★★★★ (8 Bewertungen)</div>
+      <div class="specs">
+        <div><b>CPU:</b> AMD Ryzen AI 9 365 (Strix Point)</div>
+        <div><b>RAM:</b> 32 GB</div>
+        <div><b>Speicher:</b> 1 TB SSD</div>
+        <div><b>Display:</b> 14,5″ 2880×1800 OLED, 120 Hz, 400 nits</div>
+        <div><b>Grafik:</b> AMD Radeon 880M</div>
+        <div><b>Akku:</b> 73 Wh</div>
+        <div><b>Gewicht:</b> 1,539 kg</div>
+        <div><b>Anschlüsse:</b> USB4, USB-C 3.1, USB-A, HDMI 2.1</div>
+        <div><b>Laufzeit:</b> praxisnah ~9 h gemischte Nutzung, ~6 h bei intensiver Last</div>
+        <div><b>Preis:</b> ab 1.154 €</div>
+      </div>
+      <p class="reasoning">Günstigster Einstiegspreis, aber schwächste Laufzeit im ganzen Vergleich – passt am wenigsten zum Kriterium „Laufzeit vor Leistung".</p>
+      <p class="footnote">Im Original-Screenshot stand keine Generation dabei – aktuell ist nur Gen 9 (Modell 83HN000CGE) mit dieser AI-R9/32GB/1TB-Ausstattung bei Lenovo DE gelistet.</p>
+    </div>
+  </div>
+
+  <h2>Zusätzlich: Lars' persönliche Empfehlung</h2>
+
+  <div class="card highlight">
+    <div class="card-media">
+      <div class="rank rank-special">★</div>
+      <img src="https://gzhls.at/pix/73/0a/730a693c608ece2e-n.webp" alt="Lenovo ThinkPad T14s Gen 7">
+    </div>
+    <div class="card-body">
+      <div class="card-top">
+        <h3>ThinkPad T14s Gen 7 (Intel)</h3>
+        <span class="badge special">Nicht aus den Original-Screenshots</span>
+      </div>
+      <div class="rating">Keine Sterne-Bewertung vorhanden (Business-Serie)</div>
+      <div class="specs">
+        <div><b>CPU:</b> Intel Core Ultra 7 355 (Panther Lake), auch günstiger als Core Ultra 5 325 erhältlich</div>
+        <div><b>RAM:</b> 16–32 GB LPDDR5X, onboard</div>
+        <div><b>Speicher:</b> 512 GB–1 TB SSD</div>
+        <div><b>Display:</b> 14″ 1920×1200 (WUXGA), IPS, 60 Hz, 500 nits, entspiegelt, teils Touch</div>
+        <div><b>Grafik:</b> Intel Graphics (integriert)</div>
+        <div><b>Akku:</b> 58 Wh</div>
+        <div><b>Anschlüsse:</b> 3× Thunderbolt 4/USB4, USB-A, HDMI 2.1, Nano-SIM (5G optional)</div>
+        <div><b>OS:</b> Windows 11 Pro</div>
+        <div><b>Laufzeit:</b> kein direkter Test gefunden; Vorgänger T14s Gen 6 (gleiche 58-Wh-Klasse) erreichte im Test ~21 h – Gen 7 dürfte ähnlich liegen</div>
+        <div><b>Preis:</b> ab ~1.724 € (Ultra 5/16GB/512GB/Touch) bis ~2.444 € (Ultra 7/32GB/1TB/Touch)</div>
+      </div>
+      <p class="reasoning">Nicht aus den ursprünglichen Screenshots, aber ein Business-Klassiker mit x86-Kompatibilität, ThinkPad-typisch robustem Gehäuse und Windows 11 Pro. Akku mit 58 Wh kleiner als bei den Yoga-Kandidaten, die Vorgänger-Generation kam im Test aber auf ~21 h. Preislich zwischen Slim 7x und Slim 9i. Für einen Studenten evtl. Overkill (Business-Features wie SIM-Slot, Pointing Stick) und in der Basiskonfiguration teurer als der Slim 9i mit 16 GB – aber falls Robustheit und Reparierbarkeit wichtig sind, eine valide Alternative zum Favoriten.</p>
+    </div>
+  </div>
+
+  <div class="conclusion">
+    <h3>Vorläufige Wahl</h3>
+    <p><strong>Yoga Slim 9i 14</strong>, mit <strong>Yoga Slim 7x Gen 11</strong> als Alternative, falls der Preis (Slim 9i deutlich teurer) doch den Ausschlag gibt. <strong>ThinkPad T14s Gen 7</strong> als dritte Option, falls Robustheit bzw. Business-Ausstattung stärker zählt als bei den Yoga-Modellen.</p>
+  </div>
+
+  <h2>Worauf achten</h2>
+  <div class="notes">
+    <ul>
+      <li>Nutzungszweck war zu Beginn noch nicht festgelegt – entscheidet, ob 14″ (mobil) oder 16″ (Leistung/Display) sinnvoller ist.</li>
+      <li>Yoga Slim 9i 14 mit 16 GB/1 TB: Konfiguration nicht 1:1 bestätigt, Display/Anschlüsse/Akku von der 32-GB-Schwestervariante übernommen.</li>
+      <li>Yoga Pro 7 14 im Screenshot ohne Gen-Angabe – aktuell nur als Gen 9 (83HN000CGE) mit dieser Ausstattung bei Lenovo DE gelistet.</li>
+      <li>Slim 7x (ARM/Snapdragon) hat mit Abstand die beste Laufzeit – fast doppelt so lange wie die x86-Modelle bei ähnlicher Akkukapazität, dafür ARM-Kompatibilitätsrisiko bei manchen Windows-Programmen.</li>
+    </ul>
+  </div>
+
+  <h2>Alle Specs im Überblick</h2>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Modell</th>
+          <th>CPU</th>
+          <th>RAM</th>
+          <th>Speicher</th>
+          <th>Display</th>
+          <th>Grafik</th>
+          <th>Akku / Gewicht</th>
+          <th>Laufzeit</th>
+          <th>Preis (ca.)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Yoga Slim 9i 14</td>
+          <td>Intel Core Ultra 7 256V (Lunar Lake)</td>
+          <td>16 GB LPDDR5X, onboard</td>
+          <td>1 TB SSD</td>
+          <td>14″ 3840×2400 OLED, 120 Hz, 600/750 nits HDR, 100% DCI-P3</td>
+          <td>Intel Arc (integriert)</td>
+          <td>75 Wh · 2× Thunderbolt 4/USB4 · Win 11 Home</td>
+          <td>Hersteller ~14 h, praxisnah 10–12 h</td>
+          <td>32GB-Var. ~2.000–2.300 €; 16GB-Preis unbestätigt</td>
+        </tr>
+        <tr>
+          <td>Yoga Slim 7x Gen 11</td>
+          <td>Qualcomm Snapdragon X2 Elite (ARM)</td>
+          <td>ab 16 GB LPDDR5X</td>
+          <td>ab 1 TB SSD</td>
+          <td>14″ OLED, WUXGA 60 Hz bis 2,8K 120 Hz</td>
+          <td>Adreno (integriert)</td>
+          <td>70 Wh · 1,17 kg</td>
+          <td>~19 h 42 min (Test)</td>
+          <td>ab 1.449 € bis ~2.169 €</td>
+        </tr>
+        <tr>
+          <td>IdeaPad Pro 5 16</td>
+          <td>AMD Ryzen AI 7 350 (Krackan Point)</td>
+          <td>32 GB LPDDR5X-8000, onboard</td>
+          <td>1 TB SSD (M.2 2242)</td>
+          <td>16″ 2880×1800 OLED, 120 Hz, 500/1100 nits HDR</td>
+          <td>AMD Radeon 860M</td>
+          <td>84 Wh</td>
+          <td>Hersteller 21 h (Video)</td>
+          <td>~1.199–1.699 €</td>
+        </tr>
+        <tr>
+          <td>Yoga 7a 2-in-1 Gen 11</td>
+          <td>AMD Ryzen AI 5/7 400-Serie</td>
+          <td>bis 32 GB</td>
+          <td>bis 2 TB SSD</td>
+          <td>16″ WUXGA IPS bis 2,8K 120 Hz OLED, 360°-Scharnier</td>
+          <td>AMD Radeon 840M</td>
+          <td>~1,74 kg (Wh unbestätigt)</td>
+          <td>keine verlässliche Angabe</td>
+          <td>~1.365–1.840 €</td>
+        </tr>
+        <tr>
+          <td>Yoga Pro 7 14</td>
+          <td>AMD Ryzen AI 9 365 (Strix Point)</td>
+          <td>32 GB</td>
+          <td>1 TB SSD</td>
+          <td>14,5″ 2880×1800 OLED, 120 Hz, 400 nits</td>
+          <td>AMD Radeon 880M</td>
+          <td>73 Wh · 1,539 kg</td>
+          <td>~9 h gemischt, ~6 h intensiv</td>
+          <td>ab 1.154 €</td>
+        </tr>
+        <tr>
+          <td>ThinkPad T14s Gen 7 (Intel)</td>
+          <td>Intel Core Ultra 7 355 (Panther Lake)</td>
+          <td>16–32 GB LPDDR5X, onboard</td>
+          <td>512 GB–1 TB SSD</td>
+          <td>14″ 1920×1200 IPS, 60 Hz, 500 nits</td>
+          <td>Intel Graphics (integriert)</td>
+          <td>58 Wh</td>
+          <td>kein direkter Test; Vorgänger ~21 h</td>
+          <td>ab ~1.724 € bis ~2.444 €</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    <p>Quelle: lenovo.com/de Produktseiten (Stand 10.09.2026), Specs/Preise/Akku über Geizhals, Notebookcheck und ipc-computer mit passenden Modellnummern abgeglichen (Lenovo blockiert automatisierte Abrufe direkt von der Produktseite). Preise sind Richtwerte und schwanken bei Lenovo durch Rabattaktionen ständig. Produktfotos: Geizhals (die ursprünglichen Lenovo-Screenshots lagen nicht als Datei vor).</p>
+    <p>Persönliche Notiz, kein Kaufberatungsangebot für Dritte.</p>
+  </footer>
+
+</div>
+</body>
+</html>
